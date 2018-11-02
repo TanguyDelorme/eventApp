@@ -232,7 +232,7 @@ header.masthead h2 {
     margin-bottom: -30px;
   }
   .portfolio .portfolio-item {
-    margin-bottom: 0px !important;
+    margin-bottom: 30px;
   }
 }
 

@@ -24,5 +24,5 @@ $req = $bdd->prepare('UPDATE event SET nom = :nom, date = :date, adresse = :adre
     	'adresse' => $adresse,
 ));
 
-header('Location: eventApp.php');
+header('Location: adminEvent.php');
   exit();

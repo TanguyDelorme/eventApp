@@ -19,5 +19,5 @@ $sql = 'DELETE FROM event WHERE  id = "'.$id.'"';
 // use exec() because no results are returned
 $bdd->exec($sql);
 
-header('Location: eventApp.php');
+header('Location: adminEvent.php');
   exit();

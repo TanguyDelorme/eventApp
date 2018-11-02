@@ -35,5 +35,5 @@ while ($donnees = $reponse->fetch()){
    echo "<br>";
    echo "Nom de l'évènement : " . $donnees["nom"]. "<br>" . "Date : " . $donnees["date"]. "<br>". "Adresse : " . $donnees["adresse"]. "<br>". "ID : " . $donnees["id"]. "<br>";
 }
-header('Location: eventApp.php');
+header('Location: adminEvent.php');
   exit();
