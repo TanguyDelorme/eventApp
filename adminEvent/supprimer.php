@@ -1,16 +1,7 @@
 
- <?php
+<?php
+include 'include/connection.php';
 
-//Connexion à la base de données
-try
-{
-  $bdd = new PDO('mysql:host=localhost;dbname=event;charset=utf8', 'root', '');
-  echo "Connected successfully";
-}
-catch (Exception $e)
-{
-    die('Erreur : ' . $e->getMessage());
-}
 
 $id = $_GET['id'];
 

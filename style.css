@@ -32,3 +32,30 @@
   width:12%;
   margin-left:44%;
 }
+
+.flexbox{
+    display: flex;
+    width: fit-content;
+    margin-left:5%;
+    padding-top:1%;
+    padding-bottom:1%;
+    padding-left:1%;
+    padding-right:1%;
+}
+
+.flexboxV{
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  margin-left: 5%;
+}
+
+#francemap{
+  width: 500px;
+  height: 500px;
+}
+
+.center{
+  display : flex;
+  justify-content:center;
+}
