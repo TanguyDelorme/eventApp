@@ -6,7 +6,10 @@ $idEvent = $_POST['id'];
 $name = $_POST['name'];
 $mail = $_POST['mail'];
 $nickname = $_POST['nickname'];
-
+echo $idEvent;
+echo $name;
+echo $mail;
+echo $nickname;
 //Sélection des colonnes de la table
 $reponse =  $bdd->query("SELECT nom, prenom, idEvent, mail  FROM inscription");
 $inscription = false;

@@ -18,10 +18,9 @@ if(empty($_SESSION['user_name'])){
     <meta name="author" content="">
 
     <title>Freelancer - Start Bootstrap Theme</title>
-
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=set_to_true_or_false"></script>
     <!-- Bootstrap core CSS -->
     <script src="../vendor/jquery/jquery.min.js"></script>
-
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
@@ -83,37 +82,8 @@ if(empty($_SESSION['user_name'])){
 
     <!-- Portfolio Grid Section -->
     <section class="portfolio" id="table">
-      <a href="#ajouter" data-toggle="modal"><button type="button" class="btn btn-primary btn-lg rounded-pill" style="width:20%;margin-left:40%"><i class="far fa-plus-square"></i> Add an event</button></a>
-      <br></br><br></br>
-      <div id="ajouter" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-body">
-              <h2 class="text-secondary mb-0" style="text-align:center">New event :</h2>
-              <hr class="star-dark mb-5">
-              <form action="addForm.php" method="post">
-                <div class="form-group">
-                  <label>Name :</label>
-                  <input type="text" class="form-control" name="nom">
-                </div>
-                <div class="form-group">
-                  <label>Date :</label>
-                  <input type="date" class="form-control" name="date">
-                </div>
-                <div class="form-group">
-                  <label>Address :</label>
-                  <input type="text" class="form-control" name="adresse">
-                </div>
-                <button type="submit" class="btn btn-secondary" ><i class="far fa-plus-square"></i> Add</button>
-              </form><br>
-            </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="far fa-times-circle"></i> Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-            <div class="jumbotron" style="width:80%;margin-left:10%;">
+      <div class="jumbotron" style="width:80%;margin-left:10%;">
+              <h4 style="display : flex;justify-content:center">Events table, click on one to see the participants</h4><br>
               <table id="event" class="display table-bordered ">
                       <thead>
                           <tr>
@@ -121,6 +91,7 @@ if(empty($_SESSION['user_name'])){
                                <th>Name</th>
                                <th>Date</th>
                                <th>Address</th>
+                               <th>Region</th>
                                <th>Update</th>
                                <th>Delete</th>
                           </tr>
@@ -132,6 +103,7 @@ if(empty($_SESSION['user_name'])){
                             <th>Name</th>
                             <th>Date</th>
                             <th>Address</th>
+                            <th>Region</th>
                             <th>Update</th>
                             <th>Delete</th>
                          </tr>
@@ -143,6 +115,7 @@ if(empty($_SESSION['user_name'])){
 
         <section class="portfolio" id="table2">
           <div class="jumbotron hideJumbo" style="width:80%;margin-left:10%;">
+            <h4 style="display : flex;justify-content:center">Participants table</h4><br>
               <table id="inscription" class="display table-bordered ">
                       <thead>
                           <tr>
@@ -217,6 +190,27 @@ if(empty($_SESSION['user_name'])){
                                     <button type="button" class="btn btn-danger" onclick="window.location.href='supprimer.php?action=supprimer&id=<?php echo $donnees["id"] ?>'"><i class="fas fa-trash-alt"></i> YES</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal"><i class="far fa-times-circle"></i> NO</button>
                                 </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            
+            <div id="map<?php echo $donnees["id"]; ?>" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-lg">
+                    <form method="post">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Map</h4>
+                            </div>
+
+                            <div class="modal-body">
+
+                              <?php
+                              $adresse = "https://maps.google.it/maps?q=".$donnees['adresse']."&output=embed";
+                              echo "<iframe width='600' height='450' frameborder='0' style='border:0' src='$adresse' allowfullscreen></iframe>";
+                              ?>
                             </div>
                         </div>
                     </form>

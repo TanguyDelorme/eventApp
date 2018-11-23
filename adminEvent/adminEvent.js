@@ -14,8 +14,9 @@ $(document).ready(function() {
       "columnDefs": [
         {
           "render" : function(data,type,row){
+            var inputid = row[0];
             var inputadress = row[3];
-            return '<a href="https://www.google.com/maps/search/?api=1&query='+inputadress+'" target="_blank">'+inputadress+'</a>'
+            return '<a href="#map'+ inputid +'" data-toggle="modal" >'+inputadress+'</a>'
           },
           "targets" : 3
         },
@@ -24,14 +25,14 @@ $(document).ready(function() {
             var inputid = row[0];
             return '<a href="#update'+ inputid +'" data-toggle="modal" style="display: flex;justify-content: space-around;"><button type="button" class="btn btn-success btn-sm"><i class="far fa-edit"></i></button></a>'
           },
-          "targets" : 4
+          "targets" : 5
         },
         {
           "render" : function(data,type,row){
             var inputid = row[0];
             return '<a href="#delete'+ inputid  +'" data-toggle="modal" style="display: flex;justify-content: space-around;"><button type="button" class="btn btn-danger btn-sm" ><i class="fas fa-trash-alt"></i>  </button></a>'
           },
-          "targets" : 5
+          "targets" : 6
         }
       ],
       language: { search: "" }

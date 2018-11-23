@@ -14,7 +14,8 @@ $columns = array(
     array( 'db' => 'id', 'dt' => 0 ),
     array( 'db' => 'nom', 'dt' => 1 ),
     array( 'db' => 'date', 'dt' => 2 ),
-    array( 'db' => 'adresse', 'dt' => 3 )
+    array( 'db' => 'adresse', 'dt' => 3 ),
+    array( 'db' => 'region', 'dt' => 4 )
 );
 
 

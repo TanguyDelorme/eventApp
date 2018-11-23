@@ -1,10 +1,5 @@
 <?php
 include 'include/connection.php';
-$isRegionSelected = false;
-if(isset($_GET['region'])){
-  $isRegionSelected = true;
-  $region = $_GET['region'];
-}
  ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -38,7 +33,7 @@ if(isset($_GET['region'])){
      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
      <script src="eventApp.js" type="text/javascript"></script>
   </head>
-  <body>
+  <body style="margin-right: 10px; margin-left: 10px;">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
       <div class="container">
@@ -80,7 +75,8 @@ if(isset($_GET['region'])){
         <div class="jumbotron flexbox">
           <div id="francemap"></div>
           <?php
-          if($isRegionSelected){
+          if(isset($_GET['region'])){
+            $region = $_GET['region'];
            ?>
           <div class="flexboxV">
             <a href="#ajouter" data-toggle="modal"><button type="button" class="btn btn-primary btn-lg rounded-pill" ><i class="far fa-plus-square"></i> Add an event</button></a>
@@ -128,10 +124,11 @@ if(isset($_GET['region'])){
       <?php
       //If you didn't select a region, it displays all the events available with their modal xmlrpc_parse_method_descriptions
       //If you clicked on one region you have the events for this region
-      if(!$isRegionSelected){
-        echo "<div class='center'><h4>Events coming in France</h4></div><hr class='star-dark mb-5'>";
+      if(!isset($_GET['region'])){
+        echo "<div class='center'><h4 class='selected'>Events coming in France</h4></div><hr class='star-dark mb-5'>";
          ?>
-        <div class="row" >
+      <div style="display : flex; justify-content:center;">
+        <div class="row">
           <?php
          $reponse =  $bdd->query("SELECT id, nom, date, adresse, region FROM event");
          while ($donnees = $reponse->fetch()){
@@ -140,76 +137,149 @@ if(isset($_GET['region'])){
            $date =  $donnees["date"];
            $adresse =  $donnees["adresse"]
            ?>
-           <div class="col-md-6 col-lg-4 ">
-             <a class="portfolio-item d-block mx-auto" href="#<?php echo $id ?>Event">
-               <div class="portfolio-item-caption d-flex position-absolute h-100 w-100 fond">
-                 <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">
-                   <i class="fas fa-search-plus fa-3x"></i>
-                 </div>
-               </div>
-               <div class="jumbotron jumbotron-fluid fond">
-                 <div>
-                    <?php echo  $nom ?>
-                 </div>
-             </div>
-             </a>
-           </div>
+           <div class="col-xl-3 col-md-4 col-sm-6 mb-4">
+              <div class="card text-white bg-primary o-hidden h-100">
+                <div class="card-body">
+                  <div class="mr-5"><?php echo $nom ?></div>
+                </div>
+                <div class="card-footer text-white clearfix " >
+                  <span class="float-left">The : <?php echo $date ?></span>
+                </div>
+                <a class="card-footer text-white clearfix z-1" data-address='<?php echo str_replace(" ","+",$donnees['adresse']); ?>' data-toggle='modal' href='#myModal'>
+                  <span class="float-left"><?php echo $donnees['adresse']; ?></span>
+                  <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                </a>
+                <a class="card-footer text-white clearfix " href="#subscribe<?php echo $id ?>" data-toggle="modal">
+                  <span class="float-left">  Subscribe</span>
+                  <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                </a>
+              </div>
+            </div>
 
            <!--Modale descriptive de chaque event-->
-
-           <div class="portfolio-modal mfp-hide" id="<?php echo $id ?>Event" style="width:70%;margin-left:15%">
-             <div class="portfolio-modal-dialog bg-white">
-               <a class="close-button d-none d-md-block portfolio-modal-dismiss" href="#">
-                 <i class="fa fa-3x fa-times"></i>
-               </a>
-               <div class="container text-center">
-                 <div class="row">
-                   <div class="style" style="width:85%;margin-left:7.5%">
-                     <h2 class="text-secondary text-uppercase mb-0"><?php echo $nom ?></h2>
-                     <hr class="star-dark mb-5">
-
-                     <div class="jumbotron">
-                       <div class="split">
-                         <div class="splithorizontal">
-                            <p class="mb-5 infoEvent"><?php echo "Date : ".$date ?></p>
-                            <p class="mb-5 infoEvent">Adresse : <a href="https://www.google.com/maps/search/?api=1&query=<?php echo $adresse ?>" target="_blank"><?php echo $adresse ?></a></p>
-                         </div>
-                         <div>
-                           <form action="inscrire.php" method="post">
-                              <div class="form-group">
-                                <label>Nom :</label>
-                                <input type="text" class="form-control" name="name">
-                              </div>
-                              <div class="form-group">
-                                <label>Prenom :</label>
-                                <input type="text" class="form-control" name="nickname">
-                              </div>
-                              <div class="form-group">
-                                <label>Mail :</label><input type="email" class="form-control" name="mail">
-                                <input value="<?php echo $id?>" type="hidden" class="form-control" name="id">
-                              </div>
-                              <button type="submit" class="btn btn-secondary">S'inscrire</button>
-                           </form>
-                         </div>
+           <div id="subscribe<?php echo $donnees["id"]; ?>" class="modal fade" role="dialog">
+               <div class="modal-dialog modal-lg">
+                       <div class="modal-content">
+                           <div class="modal-header">
+                               <h4 class="modal-title"><?php echo $nom ?></h4>
+                           </div>
+                           <div class="modal-body">
+                             <div class="row">
+                               <div class="style" style="width:85%;margin-left:7.5%">
+                                 <div class="jumbotron">
+                                     <div>
+                                       <form action="inscrire.php" method="post">
+                                          <div class="form-group">
+                                            <label>Nom :</label>
+                                            <input type="text" class="form-control" name="name">
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Prenom :</label>
+                                            <input type="text" class="form-control" name="nickname">
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Mail :</label><input type="email" class="form-control" name="mail">
+                                            <input value="<?php echo $id?>" type="hidden" class="form-control" name="id">
+                                          </div>
+                                          <button type="submit" class="btn btn-secondary">S'inscrire</button>
+                                       </form>
+                                   </div>
+                                </div>
+                               </div>
+                             </div>
+                           </div>
+                           <div class="modal-footer">
+                               <button type="button" class="btn btn-default" data-dismiss="modal">Close event</button>
+                           </div>
                        </div>
-                    </div>
-
-                     <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss" href="#">
-                       <i class="fa fa-close"></i>
-                       Close Event</a>
-                   </div>
-                 </div>
                </div>
-             </div>
            </div>
         <?php
         }
         ?>
+      </div>
+        <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4  class="modal-title" id="myModalLabel">Directions to the event</h4>
+                <button  type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              </div>
+              <div class="modal-body" style="display:flex">
+                      <div style="width: 400px; height: 400px;margin-right:15px" id="map"></div>
+                      <div style="width: 400px; height: 400px;overflow:auto;margin-top:-10px" id="right-panel"></div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+       <script>
+       function initMap(event) {
+         document.getElementById('right-panel').innerHTML = "";
+         var directionsDisplay = new google.maps.DirectionsRenderer;
+         var directionsService = new google.maps.DirectionsService;
+         var map = new google.maps.Map(document.getElementById('map'), {
+           zoom: 7,
+           center: {lat: 41.85, lng: -87.65}
+         });
+         directionsDisplay.setMap(map);
+         directionsDisplay.setPanel(document.getElementById('right-panel'));
+
+         if (navigator.geolocation) {
+           navigator.geolocation.getCurrentPosition(function(position) {
+             var pos = {
+               lat: position.coords.latitude,
+               lng: position.coords.longitude
+             };
+             localStorage.setItem('lat', position.coords.latitude);
+             localStorage.setItem('lng', position.coords.longitude);
+             map.setCenter(pos);
+           }, function() {
+             handleLocationError(true, infoWindow, map.getCenter());
+           });
+           calculateAndDisplayRoute(directionsService, directionsDisplay, event);
+         } else {
+           // Browser doesn't support Geolocation
+           handleLocationError(false, infoWindow, map.getCenter());
+         }
+       }
+
+       function calculateAndDisplayRoute(directionsService, directionsDisplay, event) {
+         var start = {lat:parseFloat(localStorage.getItem('lat')), lng:parseFloat(localStorage.getItem('lng'))};
+         var button = $(event.relatedTarget);
+         end = button.data('address');
+         directionsService.route({
+           origin: start,
+           destination: end,
+           travelMode: 'DRIVING'
+         }, function(response, status) {
+           if (status === 'OK') {
+             directionsDisplay.setDirections(response);
+           } else {
+             window.alert('Directions request failed due to ' + status);
+           }
+         });
+       }
+
+       // Re-init map before show modal
+       $('#myModal').on('show.bs.modal', function(event) {
+         initMap(event);
+       });
+
+       </script>
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0BJjYHaflXgduKz5GGy8KSrNZ0wiCtCY">
+        </script>
         </div>
         <?php
         }
         else{
-          echo "<div class='center'><h4>Events coming in ".$region."</h4></div><hr class='star-dark mb-5'>";
+          echo "<div class='center'><h4 class='selected'>Events coming in ".$region."</h4></div><hr class='star-dark mb-5'>";
            ?>
           <div class="row" >
             <?php
@@ -220,71 +290,144 @@ if(isset($_GET['region'])){
              $date =  $donnees["date"];
              $adresse =  $donnees["adresse"]
              ?>
-             <div class="col-md-6 col-lg-4 ">
-               <a class="portfolio-item d-block mx-auto" href="#<?php echo $id ?>Event">
-                 <div class="portfolio-item-caption d-flex position-absolute h-100 w-100 fond">
-                   <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">
-                     <i class="fas fa-search-plus fa-3x"></i>
-                   </div>
+             <div class="col-xl-3 col-sm-6 mb-3">
+                <div class="card text-white bg-primary o-hidden h-100">
+                  <div class="card-body">
+                    <div class="mr-5"><?php echo $nom ?></div>
+                  </div>
+                  <div class="card-footer text-white clearfix " >
+                    <span class="float-left">The : <?php echo $date ?></span>
+                  </div>
+                  <a class="card-footer text-white clearfix z-1" data-address='<?php echo str_replace(" ","+",$donnees['adresse']); ?>' data-toggle='modal' href='#myModal'>
+                    <span class="float-left"><?php echo $donnees['adresse']; ?></span>
+                    <span class="float-right">
+                      <i class="fas fa-angle-right"></i>
+                    </span>
+                  </a>
+                  <a class="card-footer text-white clearfix " href="#subscribe<?php echo $id ?>" data-toggle="modal">
+                    <span class="float-left">  Subscribe</span>
+                    <span class="float-right">
+                      <i class="fas fa-angle-right"></i>
+                    </span>
+                  </a>
+                </div>
+              </div>
+
+              <!--Modale descriptive de chaque event-->
+              <div id="subscribe<?php echo $donnees["id"]; ?>" class="modal fade" role="dialog">
+                  <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <h4 class="modal-title"><?php echo $nom ?></h4>
+                              </div>
+                              <div class="modal-body">
+                                <div class="row">
+                                  <div class="style" style="width:85%;margin-left:7.5%">
+                                    <div class="jumbotron">
+                                        <div>
+                                          <form action="inscrire.php" method="post">
+                                             <div class="form-group">
+                                               <label>Nom :</label>
+                                               <input type="text" class="form-control" name="name">
+                                             </div>
+                                             <div class="form-group">
+                                               <label>Prenom :</label>
+                                               <input type="text" class="form-control" name="nickname">
+                                             </div>
+                                             <div class="form-group">
+                                               <label>Mail :</label><input type="email" class="form-control" name="mail">
+                                               <input value="<?php echo $id?>" type="hidden" class="form-control" name="id">
+                                             </div>
+                                             <button type="submit" class="btn btn-secondary">S'inscrire</button>
+                                          </form>
+                                      </div>
+                                   </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close event</button>
+                              </div>
+                          </div>
+                  </div>
+              </div>
+           <?php
+           }
+           ?>
+         </div>
+           <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+             <div class="modal-dialog modal-lg" role="document">
+               <div class="modal-content">
+                 <div class="modal-header">
+                   <h4  class="modal-title" id="myModalLabel">Directions to the event</h4>
+                   <button  type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                  </div>
-                 <div class="jumbotron jumbotron-fluid fond">
-                   <div>
-                      <?php echo  $nom ?>
-                   </div>
-               </div>
-               </a>
-             </div>
-
-             <!--Modale descriptive de chaque event-->
-
-             <div class="portfolio-modal mfp-hide" id="<?php echo $id ?>Event" style="width:70%;margin-left:15%">
-               <div class="portfolio-modal-dialog bg-white">
-                 <a class="close-button d-none d-md-block portfolio-modal-dismiss" href="#">
-                   <i class="fa fa-3x fa-times"></i>
-                 </a>
-                 <div class="container text-center">
-                   <div class="row">
-                     <div class="style" style="width:85%;margin-left:7.5%">
-                       <h2 class="text-secondary text-uppercase mb-0"><?php echo $nom ?></h2>
-                       <hr class="star-dark mb-5">
-
-                       <div class="jumbotron">
-                         <div class="split">
-                           <div class="splithorizontal">
-                              <p class="mb-5 infoEvent"><?php echo "Date : ".$date ?></p>
-                              <p class="mb-5 infoEvent">Adresse : <a href="https://www.google.com/maps/search/?api=1&query=<?php echo $adresse ?>" target="_blank"><?php echo $adresse ?></a></p>
-                           </div>
-                           <div>
-                             <form action="inscrire.php" method="post">
-                                <div class="form-group">
-                                  <label>Nom :</label>
-                                  <input type="text" class="form-control" name="name">
-                                </div>
-                                <div class="form-group">
-                                  <label>Prenom :</label>
-                                  <input type="text" class="form-control" name="nickname">
-                                </div>
-                                <div class="form-group">
-                                  <label>Mail :</label><input type="email" class="form-control" name="mail">
-                                  <input value="<?php echo $id?>" type="hidden" class="form-control" name="id">
-                                </div>
-                                <button type="submit" class="btn btn-secondary">S'inscrire</button>
-                             </form>
-                           </div>
-                         </div>
-                      </div>
-
-                       <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss" href="#">
-                         <i class="fa fa-close"></i>
-                         Close Event</a>
+                 <div class="modal-body" style="display:flex">
+                         <div style="width: 400px; height: 400px;margin-right:15px" id="map"></div>
+                         <div style="width: 400px; height: 400px;overflow:auto;margin-top:-10px" id="right-panel"></div>
                      </div>
-                   </div>
                  </div>
                </div>
              </div>
-          <?php
+           </div>
+          <script>
+          function initMap(event) {
+            document.getElementById('right-panel').innerHTML = "";
+            var directionsDisplay = new google.maps.DirectionsRenderer;
+            var directionsService = new google.maps.DirectionsService;
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 7,
+              center: {lat: 41.85, lng: -87.65}
+            });
+            directionsDisplay.setMap(map);
+            directionsDisplay.setPanel(document.getElementById('right-panel'));
+
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                };
+                localStorage.setItem('lat', position.coords.latitude);
+                localStorage.setItem('lng', position.coords.longitude);
+                map.setCenter(pos);
+              }, function() {
+                handleLocationError(true, infoWindow, map.getCenter());
+              });
+              calculateAndDisplayRoute(directionsService, directionsDisplay, event);
+            } else {
+              // Browser doesn't support Geolocation
+              handleLocationError(false, infoWindow, map.getCenter());
+            }
           }
-          ?>
+
+          function calculateAndDisplayRoute(directionsService, directionsDisplay, event) {
+            var start = {lat:parseFloat(localStorage.getItem('lat')), lng:parseFloat(localStorage.getItem('lng'))};
+            var button = $(event.relatedTarget);
+            end = button.data('address');
+            directionsService.route({
+              origin: start,
+              destination: end,
+              travelMode: 'DRIVING'
+            }, function(response, status) {
+              if (status === 'OK') {
+                directionsDisplay.setDirections(response);
+              } else {
+                window.alert('Directions request failed due to ' + status);
+              }
+            });
+          }
+
+          // Re-init map before show modal
+          $('#myModal').on('show.bs.modal', function(event) {
+            initMap(event);
+          });
+
+          </script>
+           <!-- Placed at the end of the document so the pages load faster -->
+           <script async defer
+           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0BJjYHaflXgduKz5GGy8KSrNZ0wiCtCY">
+           </script>
           </div>
           <?php
         }
