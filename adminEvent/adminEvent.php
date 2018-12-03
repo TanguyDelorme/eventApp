@@ -18,7 +18,6 @@ if(empty($_SESSION['user_name'])){
     <meta name="author" content="">
 
     <title>Freelancer - Start Bootstrap Theme</title>
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=set_to_true_or_false"></script>
     <!-- Bootstrap core CSS -->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -80,7 +79,7 @@ if(empty($_SESSION['user_name'])){
       </div>
     </header>
 
-    <!-- Portfolio Grid Section -->
+    <!-- Tables -->
     <section class="portfolio" id="table">
       <div class="jumbotron" style="width:80%;margin-left:10%;">
               <h4 style="display : flex;justify-content:center">Events table, click on one to see the participants</h4><br>
@@ -142,7 +141,7 @@ if(empty($_SESSION['user_name'])){
              $reponse =  $bdd->query("SELECT id, nom, date, adresse FROM event");
                while ($donnees = $reponse->fetch()){ ?>
 
-
+                 <!-- Modal de mise a jour d'event -->
              <div id="update<?php echo $donnees["id"]; ?>" class="modal fade" role="dialog">
                <div class="modal-dialog modal-lg">
                  <div class="modal-content">
@@ -175,7 +174,7 @@ if(empty($_SESSION['user_name'])){
               </div>
             </div>
 
-
+            <!-- Modal de suppression d'event -->
             <div id="delete<?php echo $donnees["id"]; ?>" class="modal fade" role="dialog">
                 <div class="modal-dialog">
                     <form method="post">
@@ -196,7 +195,7 @@ if(empty($_SESSION['user_name'])){
                 </div>
             </div>
 
-            
+            <!-- Modal de carte google map -->
             <div id="map<?php echo $donnees["id"]; ?>" class="modal fade" role="dialog">
                 <div class="modal-dialog modal-lg">
                     <form method="post">
@@ -270,6 +269,9 @@ if(empty($_SESSION['user_name'])){
 
 
 
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0BJjYHaflXgduKz5GGy8KSrNZ0wiCtCY">
+    </script>
     <!-- Bootstrap core JavaScript -->
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 

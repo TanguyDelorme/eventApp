@@ -34,6 +34,7 @@ include 'include/connection.php';
      <script src="eventApp.js" type="text/javascript"></script>
   </head>
   <body style="margin-right: 10px; margin-left: 10px;">
+
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
       <div class="container">
@@ -70,6 +71,7 @@ include 'include/connection.php';
       </div>
     </header>
 
+    <!-- Affichage de la carte de france (et du bouton d'ajout d'event si on a choisi une region) -->
     <section class="portfolio" id="area">
       <div class="center">
         <div class="jumbotron flexbox">
@@ -86,6 +88,7 @@ include 'include/connection.php';
          ?>
         </div>
       </div>
+      <!-- Modal d'ajout d'event -->
       <div id="ajouter" class="modal fade" role="dialog">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -95,15 +98,15 @@ include 'include/connection.php';
             <form action="addForm.php" method="post">
               <div class="form-group">
                 <label>Name :</label>
-                <input type="text" class="form-control" name="nom">
+                <input type="text" class="form-control" name="nom" required>
               </div>
               <div class="form-group">
                 <label>Date :</label>
-                <input type="date" class="form-control" name="date">
+                <input type="date" class="form-control" name="date" required>
               </div>
               <div class="form-group">
                 <label>Address :</label>
-                <input type="text" class="form-control" name="adresse">
+                <input type="text" class="form-control" name="adresse" required>
               </div>
               <div class="form-group">
                 <input value="<?php echo $_GET['region']; ?>"type="text" class="form-control" name="region" hidden>
@@ -122,8 +125,7 @@ include 'include/connection.php';
     <!-- Event Grid Section -->
     <section class="portfolio" id="event">
       <?php
-      //If you didn't select a region, it displays all the events available with their modal xmlrpc_parse_method_descriptions
-      //If you clicked on one region you have the events for this region
+      //Affiche les events pour une région choisi, sinon affiche tous les events
       if(!isset($_GET['region'])){
         echo "<div class='center'><h4 class='selected'>Events coming in France</h4></div><hr class='star-dark mb-5'>";
          ?>
@@ -137,6 +139,7 @@ include 'include/connection.php';
            $date =  $donnees["date"];
            $adresse =  $donnees["adresse"]
            ?>
+           <!-- Card créée à chaque event trouvé dans la bdd -->
            <div class="col-xl-3 col-md-4 col-sm-6 mb-4">
               <div class="card text-white bg-primary o-hidden h-100">
                 <div class="card-body">
@@ -160,7 +163,7 @@ include 'include/connection.php';
               </div>
             </div>
 
-           <!--Modale descriptive de chaque event-->
+           <!--Modale d'inscription de chaque event-->
            <div id="subscribe<?php echo $donnees["id"]; ?>" class="modal fade" role="dialog">
                <div class="modal-dialog modal-lg">
                        <div class="modal-content">
@@ -175,14 +178,14 @@ include 'include/connection.php';
                                        <form action="inscrire.php" method="post">
                                           <div class="form-group">
                                             <label>Nom :</label>
-                                            <input type="text" class="form-control" name="name">
+                                            <input type="text" class="form-control" name="name" required>
                                           </div>
                                           <div class="form-group">
                                             <label>Prenom :</label>
-                                            <input type="text" class="form-control" name="nickname">
+                                            <input type="text" class="form-control" name="nickname" required>
                                           </div>
                                           <div class="form-group">
-                                            <label>Mail :</label><input type="email" class="form-control" name="mail">
+                                            <label>Mail :</label><input type="email" class="form-control" name="mail" required>
                                             <input value="<?php echo $id?>" type="hidden" class="form-control" name="id">
                                           </div>
                                           <button type="submit" class="btn btn-secondary">S'inscrire</button>
@@ -202,6 +205,7 @@ include 'include/connection.php';
         }
         ?>
       </div>
+      <!-- Modal qui affiche le trajet pour aller de la position de l'utilisateur à l'event en voiture, avec les directions -->
         <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -218,6 +222,8 @@ include 'include/connection.php';
           </div>
         </div>
        <script>
+       //Ne fonctionne que avec le code php , pas dans le js :/
+       //L'event passé en paramètre de la fonction correspond à l'adresse de l'event : dans la modal on précise data-address
        function initMap(event) {
          document.getElementById('right-panel').innerHTML = "";
          var directionsDisplay = new google.maps.DirectionsRenderer;
@@ -247,7 +253,7 @@ include 'include/connection.php';
            handleLocationError(false, infoWindow, map.getCenter());
          }
        }
-
+       //Trace l'itinéraire
        function calculateAndDisplayRoute(directionsService, directionsDisplay, event) {
          var start = {lat:parseFloat(localStorage.getItem('lat')), lng:parseFloat(localStorage.getItem('lng'))};
          var button = $(event.relatedTarget);
@@ -271,7 +277,7 @@ include 'include/connection.php';
        });
 
        </script>
-        <!-- Placed at the end of the document so the pages load faster -->
+        <!-- Ma key google -->
         <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0BJjYHaflXgduKz5GGy8KSrNZ0wiCtCY">
         </script>
@@ -433,8 +439,8 @@ include 'include/connection.php';
         }
          ?>
     </section>
-    <!-- Footer -->
 
+    <!-- Footer -->
     <footer class="footer text-center">
       <section class="portfolio" id="footer">
       <div class="container">
@@ -459,7 +465,7 @@ include 'include/connection.php';
           </div>
         </div>
       </div>
-    </section
+    </section>
     </footer>
 
 

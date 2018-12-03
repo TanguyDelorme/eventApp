@@ -1,20 +1,22 @@
-1)Launch eventApp.php
-On this page you can add a new event or check every event created. In each modal event there is information about
-the event and you can subscribe to the events you want.
+Page eventApp.php
+Page "user" . Par défaut affiche tous les events créé en France. 
+Choisir une région permet de voir les events de cette région et de créer un évent dans cette région.
+Cliquer sur l'adresse affiche une carte google map avec la position de l'utilisateur et de l'event, le trajet en voiture pour y aller ainsi que chaque direction pour s'y rendre.
+Cliquer sur subscribe permet de s'inscrire à l'event. La gestion de doublon se fait sur l'adresse mail, on ne peut s'inscrire qu'une fois par event.
+La carte est créer via la librairie franceJvmap dans le projet.
 
-2)Click on admin button in the nav bar
-Login : admin, Password : admin (or staff staff)
+Pour se connecter au mode admin il faut se logger les id sont admin, admin pour faire simple. La connexion marche par session.
 
-On this page there are one add button event and 2 tables, one for event, one for subscribed users(this one is hidden by default).
+Page adminEvent.php
+Affiche les event créer grâce à l'outil dataTable.
+On peut trier sur l'ensemble des colonnes grâce au search input en haut à droite ou par colonne via les search de chaque colonne.
+La colonne modifier permet de mettre à jour l'event correspondant.
+La colonne supprimer permet de supprimer l'event correspondant.
+Cliquer sur l'adresse affiche la carte google map de l'event.
+Cliquer sur une ligne affiche une deuxieme table avec les participants de l'event cliqué.
 
-Event table:
-Adress is a link to google map adresse
-Update button allows you to update every fields of each event
-Delete button allows you to delete each event
-Search input on the top right filter rows on each columns with the string you entered
-Search input on each columns filter rows corresponding to the input of the column
-You can choose to display another number of rows
-If you click on one row of this table you are linked to the second table
+Le dossier include contient la connexion à la bdd et la vérification pour la session user.
 
-Subscribed table
-Displays only the rows corresponding to the event clicked
+La map est faite via l'api google map et une api key.
+
+Les couleurs et navigateurs viennent du template Freelancer.
